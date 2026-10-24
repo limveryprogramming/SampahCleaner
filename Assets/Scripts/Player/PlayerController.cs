@@ -14,9 +14,9 @@ public class PlayerController : MonoBehaviour
     public Transform collectZone;
     public Transform attractZone;
     [Range(0f, 1f)] public float attractAlpha = 0.3f;
-    public float attractSizeScale = 1.4f;
-    public float attractWidthScale = 1.5f;
-    public float attractLengthScale = 1.5f;
+    public float attractSizeScale = 0.7f;
+    public float attractWidthScale = 1f;
+    public float attractLengthScale = 1f;
 
     public bool InCameraMode { get; private set; }
     public bool ShopOpen { get; private set; }
@@ -49,6 +49,17 @@ public class PlayerController : MonoBehaviour
 
         if (collectZone == null) collectZone = transform.Find("CollectZone");
         if (attractZone == null) attractZone = transform.Find("AttractZone");
+        if (attractZone == null && collectZone != null)
+        {
+            var go = new GameObject("AttractZone");
+            go.transform.SetParent(transform, false);
+            go.AddComponent<BoxCollider>().isTrigger = true;
+            var zoneRb = go.AddComponent<Rigidbody>();
+            zoneRb.isKinematic = true;
+            zoneRb.useGravity = false;
+            go.AddComponent<AttractZone>();
+            attractZone = go.transform;
+        }
         if (attractZone != null && attractZone.TryGetComponent(out AttractZone az)) az.target = collectZone;
         SetupZoneVisuals();
     }
