@@ -153,4 +153,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed6599e80056e4e4c8b87013879d24f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Trash
-  attractSpeed: 8
+  attractSpeed: 12

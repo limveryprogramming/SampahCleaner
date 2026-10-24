@@ -7,7 +7,7 @@ public class Trash : MonoBehaviour
 
     public static readonly List<Trash> All = new List<Trash>();
 
-    public float attractSpeed = 8f;
+    public float attractSpeed = 12f;
 
     Transform attractTarget;
     bool consumed;

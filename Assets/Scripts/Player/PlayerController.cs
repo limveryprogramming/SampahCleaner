@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     public Transform collectZone;
     public Transform attractZone;
     [Range(0f, 1f)] public float attractAlpha = 0.3f;
+    public float attractSizeScale = 1.4f;
+    public float attractWidthScale = 1.5f;
+    public float attractLengthScale = 1.5f;
 
     public bool InCameraMode { get; private set; }
     public bool ShopOpen { get; private set; }
@@ -191,9 +194,10 @@ public class PlayerController : MonoBehaviour
         }
         if (attractZone != null)
         {
-            float size = collectRadius * 2f;
-            attractZone.localScale = new Vector3(size, 1.5f, size);
-            attractZone.localPosition = new Vector3(0f, feet + 0.75f, cc.radius + size / 2f);
+            float size = collectRadius * attractSizeScale;
+            float length = size * attractLengthScale;
+            attractZone.localScale = new Vector3(size * attractWidthScale, 1.5f, length);
+            attractZone.localPosition = new Vector3(0f, feet + 0.75f, cc.radius + length / 2f);
         }
     }
 
