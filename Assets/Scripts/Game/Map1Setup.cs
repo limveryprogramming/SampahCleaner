@@ -31,14 +31,14 @@ public static class Map1Setup
         Prim(PrimitiveType.Cube, "WallE", new Vector3(30, 0.5f, 0), new Vector3(0.5f, 1, 60), new Color(0.4f, 0.3f, 0.2f), root);
         Prim(PrimitiveType.Cube, "WallW", new Vector3(-30, 0.5f, 0), new Vector3(0.5f, 1, 60), new Color(0.4f, 0.3f, 0.2f), root);
 
-        // Player: remove the scene's own collider so it can't block the photo raycast
+        // Player: add a visible body if the scene has none
         var player = FindPlayer();
         if (player != null)
         {
-            var col = player.GetComponent<Collider>();
-            if (col != null) Object.Destroy(col);
-            var r = player.GetComponent<Renderer>();
-            if (r == null)
+            bool hasBody = false;
+            foreach (var rend in player.GetComponentsInChildren<Renderer>())
+                if (rend.name != "CollectZone") hasBody = true;
+            if (!hasBody)
             {
                 var visual = Prim(PrimitiveType.Capsule, "RobotBody", Vector3.zero, Vector3.one, new Color(0.2f, 0.7f, 0.3f), player.transform);
                 visual.transform.localPosition = Vector3.zero;
@@ -73,8 +73,7 @@ public static class Map1Setup
         for (int i = 0; i < 6; i++)
             Trash.Spawn(new Vector3(Random.Range(-22f, 22f), 0f, Random.Range(-10f, 22f)));
 
-        new GameObject("HUD").AddComponent<GameHud>();
-    }
+        new GameObject("HUD").AddComponent<GameHud>();    }
 
     static GameObject FindPlayer()
     {

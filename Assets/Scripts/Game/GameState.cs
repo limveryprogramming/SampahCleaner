@@ -14,6 +14,7 @@ public static class GameState
     public static int FalseReports { get; private set; }
     public static int TrashCollected { get; private set; }
     public static int LitterbugsReported { get; private set; }
+    public static int Coins { get; private set; }
     public static EndingType Ending { get; private set; }
 
     static readonly HashSet<string> photographedShips = new HashSet<string>();
@@ -28,6 +29,7 @@ public static class GameState
         FalseReports = 0;
         TrashCollected = 0;
         LitterbugsReported = 0;
+        Coins = 0;
         Ending = EndingType.None;
         photographedShips.Clear();
         Time.timeScale = 1f;
@@ -45,9 +47,27 @@ public static class GameState
         if (FalseReports >= FalseReportLimit) Trigger(EndingType.AuthorityDistrust);
     }
 
-    public static void AddTrashCollected() => TrashCollected++;
+    public const int CoinsPerTrash = 1;
+    public const int CoinsPerLitterbug = 5;
 
-    public static void AddLitterbugReported() => LitterbugsReported++;
+    public static void AddTrashCollected()
+    {
+        TrashCollected++;
+        Coins += CoinsPerTrash;
+    }
+
+    public static void AddLitterbugReported()
+    {
+        LitterbugsReported++;
+        Coins += CoinsPerLitterbug;
+    }
+
+    public static bool TrySpend(int amount)
+    {
+        if (Coins < amount) return false;
+        Coins -= amount;
+        return true;
+    }
 
     // For Map 2: call with each industrial ship's id when it is validly photographed.
     public static void AddShipPhoto(string shipId)

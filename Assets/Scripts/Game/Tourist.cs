@@ -7,8 +7,10 @@ public class Tourist : MonoBehaviour
 
     public bool isLitterbug;
     public float speed = 2f;
-    public Vector2 litterInterval = new Vector2(8f, 14f);
-    public int maxTrashOnMap = 14;
+    public Vector2 litterInterval = new Vector2(5f, 9f);
+    public int maxTrashOnMap = 60;
+    public Color normalColor = new Color(0.2f, 0.45f, 1f);
+    public Color litterbugColor = new Color(1f, 0.15f, 0.15f);
 
     public bool HasLittered { get; private set; }
     public bool Reported { get; private set; }
@@ -21,6 +23,8 @@ public class Tourist : MonoBehaviour
 
     void Start()
     {
+        var rend = GetComponentInChildren<Renderer>();
+        if (rend != null) rend.material.color = isLitterbug ? litterbugColor : normalColor;
         target = transform.position;
         nextLitter = Time.time + Random.Range(litterInterval.x * 0.5f, litterInterval.y);
     }

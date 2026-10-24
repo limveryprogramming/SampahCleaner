@@ -39,7 +39,8 @@ public class GameHud : MonoBehaviour
         if (player == null) player = FindFirstObjectByType<PlayerController>();
         float w = Screen.width, h = Screen.height;
 
-        GUI.Box(new Rect(10, 10, 330, 150), GUIContent.none);
+        GUI.Box(new Rect(10, 10, 330, 180), GUIContent.none);
+        GUI.Label(new Rect(20, 155, 320, 30), $"Coins: {GameState.Coins}", label);
         GUI.Label(new Rect(20, 15, 320, 30), $"Dead animals: {GameState.DeadAnimals}/{GameState.DeadAnimalLimit}", label);
         GUI.Label(new Rect(20, 45, 320, 30), $"False reports: {GameState.FalseReports}/{GameState.FalseReportLimit}", label);
         GUI.Label(new Rect(20, 75, 320, 30), $"Trash collected: {GameState.TrashCollected}", label);
@@ -48,8 +49,8 @@ public class GameHud : MonoBehaviour
 
         bool camMode = player != null && player.InCameraMode;
         string hint = camMode
-            ? "CAMERA MODE - Mouse: look | Space/Click: photo | F: exit"
-            : "WASD: move | E: collect trash | F: camera mode | R: shop";
+            ? "CAMERA MODE - Mouse: look | Left click: photo | F: exit"
+            : "Mouse: look | WASD: move | Walk into trash to collect | F: camera mode | R: shop";
         GUI.Label(new Rect(10, h - 40, w, 30), hint, label);
 
         if (camMode)
@@ -58,15 +59,8 @@ public class GameHud : MonoBehaviour
             GUI.Box(new Rect(w / 2 - 20, h / 2 - 2, 40, 4), GUIContent.none);
         }
 
-        if (player != null && player.ShopOpen)
-        {
-            GUI.Box(new Rect(w / 2 - 200, h / 2 - 100, 400, 200), GUIContent.none);
-            GUI.Label(new Rect(w / 2 - 200, h / 2 - 90, 400, 40), "SHOP", big);
-            GUI.Label(new Rect(w / 2 - 190, h / 2 - 30, 380, 80), "Nothing for sale yet.\nPress R to close.", center);
-        }
-
         if (Time.unscaledTime < messageUntil)
-            GUI.Label(new Rect(0, 170, w, 40), message, center);
+            GUI.Label(new Rect(0, 200, w, 40), message, center);
 
         if (Time.unscaledTime < cameraFlashUntil)
         {
