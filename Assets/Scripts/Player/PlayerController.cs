@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     PlayerInputActions input;
     Renderer[] bodyRenderers;
 
+    public static Vector3? SpawnOverride;
     CharacterController cc;
     float verticalVelocity;
     const float Gravity = -20f;
@@ -72,7 +73,8 @@ public class PlayerController : MonoBehaviour
     {
         cam = Camera.main;
         cc.enabled = false;
-        transform.position = new Vector3(0f, 1.2f, 0f);
+        transform.position = SpawnOverride ?? new Vector3(0f, 1.2f, 0f);
+        SpawnOverride = null;
         cc.enabled = true;
         pitch = orbitPitch;
     }
@@ -170,7 +172,7 @@ public class PlayerController : MonoBehaviour
         if (bodyRenderers == null) bodyRenderers = GetComponentsInChildren<Renderer>(true);
         foreach (var r in bodyRenderers)
         {
-            if (r == null || r.transform == collectZone || r.transform == attractZone) continue;
+            if (r == null || r.transform == collectZone) continue;
             r.enabled = !on;
         }
     }

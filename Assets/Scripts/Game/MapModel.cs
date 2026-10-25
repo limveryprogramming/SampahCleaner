@@ -3,13 +3,19 @@ using UnityEngine;
 // Loads a diorama FBX from Resources, fits it to the play area and lowers/raises it so its ground sits at y = 0.
 public static class MapModel
 {
-    public static GameObject Place(string resourcePath, Transform parent, float targetWidth, string materialPath = null)
+    public static GameObject Place(string resourcePath, Transform parent, float targetWidth, string materialPath = null, bool walls = true)
     {
         var prefab = Resources.Load<GameObject>(resourcePath);
         if (prefab == null)
         {
             Debug.LogWarning($"Map model '{resourcePath}' not found in Resources; keeping placeholder ground.");
             return null;
+        }
+
+        if (Application.isPlaying)
+        {
+            var existing = GameObject.Find("MapRoot");
+            if (existing != null) return existing;
         }
 
         var go = Object.Instantiate(prefab, parent);
@@ -45,7 +51,30 @@ public static class MapModel
 
         go.transform.position += Vector3.up * -GroundHeight(go.transform, targetWidth);
         Physics.SyncTransforms();
+        if (walls) AddBoundaryWalls(WorldBounds(renderers), parent);
         return go;
+    }
+
+    // Invisible tall walls just inside the model's footprint so the player cannot walk off its edges.
+    static void AddBoundaryWalls(Bounds b, Transform parent)
+    {
+        const float inset = 1.5f, thick = 2f, height = 40f;
+        float minX = b.min.x + inset, maxX = b.max.x - inset, minZ = b.min.z + inset, maxZ = b.max.z - inset;
+        float w = maxX - minX, d = maxZ - minZ, cy = height * 0.5f - 5f;
+        Wall("BoundWall_N", new Vector3((minX + maxX) / 2f, cy, maxZ + thick / 2f), new Vector3(w + thick * 2f, height, thick), parent);
+        Wall("BoundWall_S", new Vector3((minX + maxX) / 2f, cy, minZ - thick / 2f), new Vector3(w + thick * 2f, height, thick), parent);
+        Wall("BoundWall_E", new Vector3(maxX + thick / 2f, cy, (minZ + maxZ) / 2f), new Vector3(thick, height, d), parent);
+        Wall("BoundWall_W", new Vector3(minX - thick / 2f, cy, (minZ + maxZ) / 2f), new Vector3(thick, height, d), parent);
+        Physics.SyncTransforms();
+    }
+
+    static void Wall(string name, Vector3 pos, Vector3 size, Transform parent)
+    {
+        var go = new GameObject(name);
+        go.transform.SetParent(parent, false);
+        go.transform.position = pos;
+        var col = go.AddComponent<BoxCollider>();
+        col.size = size;
     }
 
     static Bounds WorldBounds(Renderer[] renderers)
