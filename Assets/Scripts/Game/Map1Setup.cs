@@ -16,6 +16,8 @@ public static class Map1Setup
     static void Build()
     {
         GameState.Reset();
+        Trash.GroundBase = 0f;
+        Trash.OceanOnly = false;
         Trash.All.Clear();
         Tourist.All.Clear();
         Animal.AliveCount = 0;
@@ -29,7 +31,6 @@ public static class Map1Setup
         if (MapModel.Place("Maps/BeachTown/Meshy_AI_diorama_beach_town_ti_1024110804_texture", root, 60f, "Maps/BeachTown/BeachTown_Mat", false) != null)
         {
             ground.GetComponent<Renderer>().enabled = false;
-            root.Find("Sea").GetComponent<Renderer>().enabled = false;
         }
 
         // The placeholder floor stays as an invisible flat walkway at y = 0 so dunes and rubble in the model never block the player.
@@ -57,8 +58,8 @@ public static class Map1Setup
             cc.slopeLimit = 60f;
         }
 
-        // Player: add a visible body if the scene has none
         var player = FindPlayer();
+        if (player != null) ModelSkin.DressPlayer(player);
         if (player != null)
         {
             bool hasBody = false;
@@ -87,16 +88,18 @@ public static class Map1Setup
         }
 
         // Animals: 6 cubes
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 3; i++)
         {
-            Vector3 pos = new Vector3(Random.Range(-24f, 24f), 0.3f, Random.Range(-20f, 18f));
-            var a = Prim(PrimitiveType.Cube, "Animal", pos, new Vector3(0.8f, 0.6f, 1.2f), new Color(0.9f, 0.6f, 0.75f), root);
+            float ax = Random.Range(-24f, 24f), az = Random.Range(-20f, 18f);
+            Vector3 pos = new Vector3(ax, Trash.GroundY(ax, az) + 0.5f, az);
+            var a = Prim(PrimitiveType.Cube, "Animal", pos, Vector3.one, new Color(0.9f, 0.6f, 0.75f), root);
             Object.Destroy(a.GetComponent<Collider>());
+            ModelSkin.Attach(a.transform, "Turtle", 1.4f, -0.5f, false, new Vector3(-90f, 0f, 0f));
             a.AddComponent<Animal>();
         }
 
         // Starting litter
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < 70; i++)
             Trash.Spawn(new Vector3(Random.Range(-22f, 22f), 0f, Random.Range(-10f, 22f)));
 
         new GameObject("HUD").AddComponent<GameHud>();    }

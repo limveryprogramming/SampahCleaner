@@ -73,25 +73,61 @@ public class GameHud : MonoBehaviour
         if (GameState.Ending != EndingType.None) DrawEnding(w, h);
     }
 
+    const int EndingSlideCount = 3;
+    EndingType slidesFor;
+    int slideIndex;
+    Texture2D[] slides;
+
+    void LoadSlides()
+    {
+        slidesFor = GameState.Ending;
+        slideIndex = 0;
+        slides = new Texture2D[EndingSlideCount];
+        int n = (int)GameState.Ending;
+        for (int i = 0; i < EndingSlideCount; i++)
+            slides[i] = Resources.Load<Texture2D>($"Endings/ending_{n}_ending_{n}_slide_{i + 1}");
+    }
+
     void DrawEnding(float w, float h)
     {
+        if (slides == null || slidesFor != GameState.Ending) LoadSlides();
+
         var old = GUI.color;
-        GUI.color = new Color(0, 0, 0, 0.85f);
+        GUI.color = Color.black;
         GUI.DrawTexture(new Rect(0, 0, w, h), Texture2D.whiteTexture);
         GUI.color = old;
 
-        GUI.Label(new Rect(w / 2 - 450, h / 2 - 180, 900, 60), GameState.EndingTitle(GameState.Ending), big);
-        GUI.Label(new Rect(w / 2 - 400, h / 2 - 100, 800, 120), "\"" + GameState.EndingText(GameState.Ending) + "\"", center);
-
-        if (GUI.Button(new Rect(w / 2 - 160, h / 2 + 50, 150, 50), "Restart"))
+        var tex = slides[slideIndex];
+        if (tex != null)
         {
-            GameState.Reset();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            float scale = Mathf.Min(w / tex.width, h / tex.height);
+            float tw = tex.width * scale, th = tex.height * scale;
+            GUI.DrawTexture(new Rect((w - tw) / 2f, (h - th) / 2f, tw, th), tex, ScaleMode.ScaleToFit);
         }
-        if (GUI.Button(new Rect(w / 2 + 10, h / 2 + 50, 150, 50), "Main Menu"))
+        else
         {
-            GameState.Reset();
-            SceneManager.LoadScene("MainMenuScene");
+            GUI.Label(new Rect(w / 2 - 450, h / 2 - 180, 900, 60), GameState.EndingTitle(GameState.Ending), big);
+            GUI.Label(new Rect(w / 2 - 400, h / 2 - 100, 800, 120), "\"" + GameState.EndingText(GameState.Ending) + "\"", center);
+        }
+
+        float by = h - 80;
+        bool last = slideIndex >= EndingSlideCount - 1;
+        if (!last)
+        {
+            if (GUI.Button(new Rect(w / 2 - 75, by, 150, 50), "Next")) slideIndex++;
+        }
+        else
+        {
+            if (GUI.Button(new Rect(w / 2 - 160, by, 150, 50), "Restart"))
+            {
+                GameState.Reset();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+            if (GUI.Button(new Rect(w / 2 + 10, by, 150, 50), "Main Menu"))
+            {
+                GameState.Reset();
+                SceneManager.LoadScene("MainMenuScene");
+            }
         }
     }
 }

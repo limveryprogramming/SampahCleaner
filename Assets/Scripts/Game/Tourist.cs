@@ -8,7 +8,7 @@ public class Tourist : MonoBehaviour
     public bool isLitterbug;
     public float speed = 2f;
     public Vector2 litterInterval = new Vector2(5f, 9f);
-    public int maxTrashOnMap = 60;
+    public int maxTrashOnMap = 150;
     public Color normalColor = new Color(0.2f, 0.45f, 1f);
     public Color litterbugColor = new Color(1f, 0.15f, 0.15f);
 
@@ -25,7 +25,7 @@ public class Tourist : MonoBehaviour
     {
         var rend = GetComponentInChildren<Renderer>();
         // Capsule is 2 tall and centred on the tourist, so feet are at local y = -1.
-        var model = ModelSkin.Attach(transform, "Characters", 1.8f, -1f, true);
+        var model = ModelSkin.Attach(transform, "Characters", 1.8f, -1f, true, new Vector3(-90f, 0f, 0f));
         if (model != null)
         {
             if (rend != null) rend.enabled = false;

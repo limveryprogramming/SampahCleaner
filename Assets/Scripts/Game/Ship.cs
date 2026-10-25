@@ -9,6 +9,7 @@ public class Ship : MonoBehaviour
     public int dropsPerPile = 4;
     public int maxTrashOnMap = 60;
     public float exitX = 42f;
+    public float roll;
 
     float direction = 1f;
     float nextDrop;
@@ -16,7 +17,7 @@ public class Ship : MonoBehaviour
     void Start()
     {
         direction = transform.position.x < 0f ? 1f : -1f;
-        transform.rotation = Quaternion.LookRotation(Vector3.right * direction);
+        transform.rotation = Quaternion.LookRotation(Vector3.right * direction) * Quaternion.Euler(0f, 0f, roll);
         nextDrop = Time.time + Random.Range(dropInterval.x * 0.5f, dropInterval.y);
     }
 

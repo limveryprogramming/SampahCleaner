@@ -34,20 +34,32 @@ public class Trash : MonoBehaviour
     }
 
     // Lowest upward-facing surface under (x, z) that is low enough to be ground (not a roof or tree top).
-    static float GroundY(float x, float z)
+    public static float GroundBase;
+    const float GroundBand = 2f;
+
+    public static float GroundY(float x, float z)
     {
         float best = float.MaxValue;
-        foreach (var hit in Physics.RaycastAll(new Vector3(x, 100f, z), Vector3.down, 200f, ~0, QueryTriggerInteraction.Ignore))
+        foreach (var hit in Physics.RaycastAll(new Vector3(x, 300f, z), Vector3.down, 600f, ~0, QueryTriggerInteraction.Ignore))
         {
-            if (hit.collider is CharacterController || hit.collider.GetComponentInParent<Trash>() != null) continue;
-            if (hit.normal.y > 0.5f && hit.point.y < 2f) best = Mathf.Min(best, hit.point.y);
+            if (hit.collider is CharacterController || hit.collider.name.StartsWith("BoundWall")
+                || hit.collider.GetComponentInParent<Trash>() != null) continue;
+            if (hit.normal.y > 0.5f && hit.point.y < GroundBase + GroundBand) best = Mathf.Min(best, hit.point.y);
         }
-        return best == float.MaxValue ? 0f : best;
+        return best == float.MaxValue ? GroundBase : best;
     }
 
+    public static bool OceanOnly;
+    const float OceanTolerance = 0.6f;
+
+    public static bool IsOcean(float x, float z) => GroundY(x, z) <= GroundBase + OceanTolerance;
+
+    // Returns null when OceanOnly is set and the spot is land/reef.
     public static Trash Spawn(Vector3 position)
     {
-        position.y = GroundY(position.x, position.z) + 0.6f;
+        float gy = GroundY(position.x, position.z);
+        if (OceanOnly && gy > GroundBase + OceanTolerance) return null;
+        position.y = gy + 0.6f;
         var prefab = Resources.Load<GameObject>("Trash");
         if (prefab != null && Resources.LoadAll<GameObject>("TrashModels").Length == 0)
         {

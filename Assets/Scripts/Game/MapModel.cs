@@ -77,6 +77,19 @@ public static class MapModel
         col.size = size;
     }
 
+    // Topmost surface of the scene at (x, z), or fallback if nothing is hit.
+    public static float SurfaceY(float x, float z, float fallback = 0f)
+    {
+        float best = float.MinValue;
+        foreach (var hit in Physics.RaycastAll(new Vector3(x, 300f, z), Vector3.down, 600f, ~0, QueryTriggerInteraction.Ignore))
+        {
+            if (hit.collider is CharacterController || hit.collider.name.StartsWith("BoundWall")
+                || hit.collider.GetComponentInParent<Trash>() != null) continue;
+            best = Mathf.Max(best, hit.point.y);
+        }
+        return best == float.MinValue ? fallback : best;
+    }
+
     static Bounds WorldBounds(Renderer[] renderers)
     {
         Bounds b = renderers[0].bounds;
