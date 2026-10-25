@@ -280,7 +280,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
@@ -1806,7 +1806,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1349031052}
   - {fileID: 1773438820}
   - {fileID: 2000559821}
   - {fileID: 1513407520}
@@ -2306,7 +2305,7 @@ GameObject:
   - component: {fileID: 1349031054}
   - component: {fileID: 1349031053}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2320,12 +2319,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1349031051}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21.1842, y: -12.5807, z: -23.8161}
-  m_LocalScale: {x: 2.8915, y: 6.318727, z: 28.880844}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.9869, y: -3.16, z: 10.3464}
+  m_LocalScale: {x: 54.20974, y: 6.437078, z: 18.695995}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 803591553}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1349031053
 BoxCollider:
@@ -4507,4 +4506,5 @@ SceneRoots:
   - {fileID: 1996028980}
   - {fileID: 1695997174}
   - {fileID: 746628774}
+  - {fileID: 1349031052}
   - {fileID: 803591553}

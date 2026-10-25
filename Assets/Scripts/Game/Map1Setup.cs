@@ -96,7 +96,7 @@ public static class Map1Setup
         }
 
         // Starting litter
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 30; i++)
             Trash.Spawn(new Vector3(Random.Range(-22f, 22f), 0f, Random.Range(-10f, 22f)));
 
         new GameObject("HUD").AddComponent<GameHud>();    }

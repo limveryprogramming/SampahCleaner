@@ -24,7 +24,13 @@ public class Tourist : MonoBehaviour
     void Start()
     {
         var rend = GetComponentInChildren<Renderer>();
-        if (rend != null) rend.material.color = isLitterbug ? litterbugColor : normalColor;
+        // Capsule is 2 tall and centred on the tourist, so feet are at local y = -1.
+        var model = ModelSkin.Attach(transform, "Characters", 1.8f, -1f, true);
+        if (model != null)
+        {
+            if (rend != null) rend.enabled = false;
+        }
+        else if (rend != null) rend.material.color = isLitterbug ? litterbugColor : normalColor;
         target = transform.position;
         nextLitter = Time.time + Random.Range(litterInterval.x * 0.5f, litterInterval.y);
     }

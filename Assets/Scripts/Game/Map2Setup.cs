@@ -46,7 +46,7 @@ public static class Map2Setup
             a.AddComponent<Animal>();
         }
 
-        for (int i = 0; i < 12; i++)
+        for (int i = 0; i < 30; i++)
             Trash.Spawn(new Vector3(Random.Range(-26f, 26f), 0f, Random.Range(-50f, 24f)));
 
         new GameObject("HUD").AddComponent<GameHud>();
