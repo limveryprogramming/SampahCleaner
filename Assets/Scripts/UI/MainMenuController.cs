@@ -3,11 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    [SerializeField] string gameScene = "Map1";
+    [SerializeField] string gameScene = "SampleScene";
 
     public void Play() => SceneManager.LoadScene(gameScene);
 
-    public void UnlimitedMode() => Debug.Log("Unlimited Mode: not built yet.");// i dont think we got time
+    public void UnlimitedMode() => Debug.Log("Unlimited Mode: not built yet.");
 
     public void Upgrades() => Debug.Log("Upgrades: not built yet.");
 
