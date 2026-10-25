@@ -230,6 +230,14 @@ public class PlayerController : MonoBehaviour
             break;
         }
         if (!found) return;
+        var ship = hit.collider.GetComponentInParent<Ship>();
+        if (ship != null)
+        {
+            if (ship.isIndustrial) { GameState.AddShipPhoto(ship.shipId); GameHud.Flash("Valid report: industrial ship photographed!"); }
+            else GameHud.Flash("That is a fishing boat, not an industrial polluter.");
+            return;
+        }
+
         var tourist = hit.collider.GetComponentInParent<Tourist>();
         if (tourist == null || tourist.Reported) return;
 

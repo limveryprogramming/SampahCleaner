@@ -26,6 +26,12 @@ public static class Map1Setup
         ground.GetComponent<Collider>().isTrigger = false;
         Prim(PrimitiveType.Cube, "Sea", new Vector3(0, -0.6f, -45), new Vector3(60, 1, 30), new Color(0.15f, 0.45f, 0.8f), root);
 
+        if (MapModel.Place("Maps/BeachTown/Meshy_AI_diorama_beach_town_ti_1024110804_texture", root, 60f, "Maps/BeachTown/BeachTown_Mat") != null)
+        {
+            ground.GetComponent<Renderer>().enabled = false;
+            root.Find("Sea").GetComponent<Renderer>().enabled = false;
+        }
+
         // Border walls (invisible-ish low rails)
         Prim(PrimitiveType.Cube, "WallN", new Vector3(0, 0.5f, 30), new Vector3(60, 1, 0.5f), new Color(0.4f, 0.3f, 0.2f), root);
         Prim(PrimitiveType.Cube, "WallE", new Vector3(30, 0.5f, 0), new Vector3(0.5f, 1, 60), new Color(0.4f, 0.3f, 0.2f), root);
